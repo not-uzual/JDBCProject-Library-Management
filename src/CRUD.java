@@ -87,13 +87,18 @@ public class CRUD {
         System.out.print("Enter Id of the Book: ");
         int id = sc.nextInt();
 
+        if(!isIdExist(id)) {
+            System.out.println("\n-----No book found with ID " + id + ". Update failed.-----");
+            return;
+        }
+
         System.out.print("Enter Year: ");
         int yr = sc.nextInt();
         try {
             String query = "update books set release_year = "+yr+" where id ="+id;
             stmt.executeUpdate(query);
 
-            System.out.println("\n-----Record Updated Sucessfully.-----");
+            System.out.println("\n-----Record Updated Successfully.-----");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -103,6 +108,11 @@ public class CRUD {
         System.out.print("Enter Id of the Book: ");
         int id = sc.nextInt();
 
+        if(!isIdExist(id)) {
+            System.out.println("\n-----No book found with ID " + id + ". Delete failed.-----");
+            return;
+        }
+
         try {
             String query = "delete from books where id = "+id;
             stmt.executeUpdate(query);
@@ -110,6 +120,16 @@ public class CRUD {
             System.out.println("\n-----Record Deleted Successfully.-----");
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean isIdExist(int id){
+        try {
+            ResultSet rs = stmt.executeQuery("Select id from books where id = "+id);
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
